@@ -158,7 +158,7 @@ export default function TasksPage() {
             <div className="mb-5">
               <label className="label">Project *</label>
               <select className="input" value={selectedProjectId} onChange={handleProjectChange}>
-                <option value="">Select a project…</option>
+                <option value="">Select a project</option>
                 {projects.map((p) => (
                   <option key={p.id} value={p.id}>{p.name}</option>
                 ))}

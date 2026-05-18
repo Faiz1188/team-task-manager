@@ -10,13 +10,13 @@ async function startServer() {
   try {
     // Sync all Sequelize models to SQLite (creates tables if they don't exist)
     await sequelize.sync();
-    console.log('✅ Database synced successfully');
+    console.log(' Database synced successfully');
 
     app.listen(PORT, () => {
-      console.log(`🚀 Server running on http://localhost:${PORT}`);
+      console.log(` Server running on http://localhost:${PORT}`);
     });
   } catch (error) {
-    console.error('❌ Failed to start server:', error);
+    console.error(' Failed to start server:', error);
     process.exit(1);
   }
 }

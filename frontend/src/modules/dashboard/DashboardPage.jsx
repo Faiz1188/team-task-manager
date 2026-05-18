@@ -9,7 +9,7 @@ const StatCard = ({ label, value, color, icon }) => (
       {icon}
     </div>
     <div>
-      <p className="text-3xl font-bold text-white">{value ?? '—'}</p>
+      <p className="text-3xl font-bold text-white">{value ?? ''}</p>
       <p className="text-sm text-slate-400 mt-0.5">{label}</p>
     </div>
   </div>
@@ -36,7 +36,7 @@ export default function DashboardPage() {
       {/* Header */}
       <div className="mb-8">
         <h1 className="text-3xl font-bold text-white">
-          Welcome back, <span className="text-primary-500">{user?.name?.split(' ')[0]}</span> 👋
+          Welcome back, <span className="text-primary-500">{user?.name?.split(' ')[0]}</span> 
         </h1>
         <p className="text-slate-400 mt-1">Here's what's happening with your team today.</p>
       </div>
@@ -44,7 +44,7 @@ export default function DashboardPage() {
       {loading && (
         <div className="flex items-center gap-2 text-slate-400 mb-6">
           <div className="w-4 h-4 border-2 border-primary-500 border-t-transparent rounded-full animate-spin" />
-          Loading dashboard…
+          Loading dashboard
         </div>
       )}
 
@@ -77,7 +77,7 @@ export default function DashboardPage() {
         <div className="lg:col-span-2 card">
           <div className="flex items-center justify-between mb-4">
             <h2 className="font-semibold text-white">Recent Tasks</h2>
-            <Link to="/tasks" className="text-primary-500 text-sm hover:text-primary-400">View all →</Link>
+            <Link to="/tasks" className="text-primary-500 text-sm hover:text-primary-400">View all </Link>
           </div>
           {recentTasks.length === 0 ? (
             <p className="text-slate-500 text-sm py-8 text-center">No tasks yet. Create one from a project!</p>
@@ -107,7 +107,7 @@ export default function DashboardPage() {
             Overdue Tasks
           </h2>
           {overdueTasks.length === 0 ? (
-            <p className="text-slate-500 text-sm py-8 text-center">🎉 No overdue tasks!</p>
+            <p className="text-slate-500 text-sm py-8 text-center"> No overdue tasks!</p>
           ) : (
             <div className="space-y-3">
               {overdueTasks.map((task) => (
@@ -115,7 +115,7 @@ export default function DashboardPage() {
                   <p className="text-sm font-medium text-slate-200">{task.title}</p>
                   <p className="text-xs text-red-400 mt-1">Due: {new Date(task.dueDate).toLocaleDateString()}</p>
                   {task.assignedUser && (
-                    <p className="text-xs text-slate-500 mt-0.5">→ {task.assignedUser.name}</p>
+                    <p className="text-xs text-slate-500 mt-0.5"> {task.assignedUser.name}</p>
                   )}
                 </div>
               ))}

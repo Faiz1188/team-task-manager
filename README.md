@@ -1,10 +1,10 @@
-# 🗂️ Team Task Manager
+# ️ Team Task Manager
 
 A full-stack **Team Task Manager** built with the **MERN stack** (MongoDB, Express.js, React.js, Node.js). Features JWT authentication, role-based access control (Admin/Member), project management, and task tracking.
 
 ---
 
-## 🛠️ Tech Stack
+## ️ Tech Stack
 
 | Layer | Technology |
 |---|---|
@@ -17,48 +17,48 @@ A full-stack **Team Task Manager** built with the **MERN stack** (MongoDB, Expre
 
 ---
 
-## 📁 Folder Structure
+##  Folder Structure
 
 ```
 team-task-manager/
-├── backend/
-│   ├── src/
-│   │   ├── modules/
-│   │   │   ├── auth/           # Signup, login, JWT
-│   │   │   ├── users/          # User model & CRUD
-│   │   │   ├── projects/       # Project model & CRUD
-│   │   │   └── tasks/          # Task model & CRUD
-│   │   ├── middlewares/
-│   │   │   ├── auth.middleware.js
-│   │   │   ├── role.middleware.js
-│   │   │   └── error.middleware.js
-│   │   ├── config/
-│   │   │   └── db.js
-│   │   └── app.js
-│   ├── .env.example
-│   ├── package.json
-│   └── server.js
-├── frontend/
-│   ├── src/
-│   │   ├── modules/
-│   │   │   ├── auth/           # Login, Signup, authSlice
-│   │   │   ├── dashboard/      # Stats & filters
-│   │   │   ├── projects/       # Project list & detail
-│   │   │   └── tasks/          # Task cards & form
-│   │   ├── components/         # Navbar, ProtectedRoute
-│   │   ├── services/           # Axios API instance
-│   │   ├── store/              # Redux store
-│   │   ├── App.jsx
-│   │   └── main.jsx
-│   ├── .env.example
-│   └── package.json
-├── .gitignore
-└── README.md
+ backend/
+    src/
+       modules/
+          auth/           # Signup, login, JWT
+          users/          # User model & CRUD
+          projects/       # Project model & CRUD
+          tasks/          # Task model & CRUD
+       middlewares/
+          auth.middleware.js
+          role.middleware.js
+          error.middleware.js
+       config/
+          db.js
+       app.js
+    .env.example
+    package.json
+    server.js
+ frontend/
+    src/
+       modules/
+          auth/           # Login, Signup, authSlice
+          dashboard/      # Stats & filters
+          projects/       # Project list & detail
+          tasks/          # Task cards & form
+       components/         # Navbar, ProtectedRoute
+       services/           # Axios API instance
+       store/              # Redux store
+       App.jsx
+       main.jsx
+    .env.example
+    package.json
+ .gitignore
+ README.md
 ```
 
 ---
 
-## 🚀 Local Setup
+##  Local Setup
 
 ### Prerequisites
 - Node.js >= 18
@@ -94,7 +94,7 @@ The frontend starts on **http://localhost:5173**
 
 ---
 
-## 🔑 Environment Variables
+##  Environment Variables
 
 ### Backend (`backend/.env`)
 
@@ -113,49 +113,49 @@ The frontend starts on **http://localhost:5173**
 
 ---
 
-## 📡 API Endpoints
+##  API Endpoints
 
 ### Auth
 
 | Method | Route | Auth | Role | Description |
 |---|---|---|---|---|
-| POST | `/api/auth/signup` | ❌ | — | Register a new user |
-| POST | `/api/auth/login` | ❌ | — | Login and receive JWT |
+| POST | `/api/auth/signup` |  |  | Register a new user |
+| POST | `/api/auth/login` |  |  | Login and receive JWT |
 
 ### Users
 
 | Method | Route | Auth | Role | Description |
 |---|---|---|---|---|
-| GET | `/api/users` | ✅ | Admin | List all users |
-| GET | `/api/users/me` | ✅ | Any | Get current user profile |
-| GET | `/api/users/:id` | ✅ | Admin | Get user by ID |
+| GET | `/api/users` |  | Admin | List all users |
+| GET | `/api/users/me` |  | Any | Get current user profile |
+| GET | `/api/users/:id` |  | Admin | Get user by ID |
 
 ### Projects
 
 | Method | Route | Auth | Role | Description |
 |---|---|---|---|---|
-| GET | `/api/projects` | ✅ | Any | List projects (user's own) |
-| POST | `/api/projects` | ✅ | Admin | Create a new project |
-| GET | `/api/projects/:id` | ✅ | Member+ | Get project details |
-| PUT | `/api/projects/:id` | ✅ | Admin | Update project |
-| DELETE | `/api/projects/:id` | ✅ | Admin | Delete project |
-| POST | `/api/projects/:id/members` | ✅ | Admin | Add member to project |
-| DELETE | `/api/projects/:id/members/:uid` | ✅ | Admin | Remove member from project |
+| GET | `/api/projects` |  | Any | List projects (user's own) |
+| POST | `/api/projects` |  | Admin | Create a new project |
+| GET | `/api/projects/:id` |  | Member+ | Get project details |
+| PUT | `/api/projects/:id` |  | Admin | Update project |
+| DELETE | `/api/projects/:id` |  | Admin | Delete project |
+| POST | `/api/projects/:id/members` |  | Admin | Add member to project |
+| DELETE | `/api/projects/:id/members/:uid` |  | Admin | Remove member from project |
 
 ### Tasks
 
 | Method | Route | Auth | Role | Description |
 |---|---|---|---|---|
-| GET | `/api/tasks` | ✅ | Any | List tasks (filterable by project/assignee) |
-| POST | `/api/tasks` | ✅ | Admin | Create a task |
-| GET | `/api/tasks/:id` | ✅ | Any | Get task details |
-| PUT | `/api/tasks/:id` | ✅ | Admin | Update task (full) |
-| PATCH | `/api/tasks/:id/status` | ✅ | Member | Update own task status |
-| DELETE | `/api/tasks/:id` | ✅ | Admin | Delete a task |
+| GET | `/api/tasks` |  | Any | List tasks (filterable by project/assignee) |
+| POST | `/api/tasks` |  | Admin | Create a task |
+| GET | `/api/tasks/:id` |  | Any | Get task details |
+| PUT | `/api/tasks/:id` |  | Admin | Update task (full) |
+| PATCH | `/api/tasks/:id/status` |  | Member | Update own task status |
+| DELETE | `/api/tasks/:id` |  | Admin | Delete a task |
 
 ---
 
-## 👥 Roles
+##  Roles
 
 | Role | Permissions |
 |---|---|
@@ -164,6 +164,6 @@ The frontend starts on **http://localhost:5173**
 
 ---
 
-## 📄 License
+##  License
 
 MIT

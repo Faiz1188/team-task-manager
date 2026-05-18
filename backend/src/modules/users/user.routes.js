@@ -8,13 +8,13 @@ const router = Router();
 // All user routes require authentication
 router.use(authMiddleware);
 
-// GET /api/users/me — current user profile
+// GET /api/users/me  current user profile
 router.get('/me', getMe);
 
-// GET /api/users — admin only
+// GET /api/users  admin only
 router.get('/', requireRole('admin'), getAllUsers);
 
-// GET /api/users/:id — admin only
+// GET /api/users/:id  admin only
 router.get('/:id', requireRole('admin'), getUserById);
 
 module.exports = router;

@@ -83,7 +83,7 @@ export default function ProjectDetail() {
       {/* Back */}
       <button onClick={() => navigate('/projects')}
         className="flex items-center gap-1 text-slate-400 hover:text-white text-sm mb-6 transition-colors">
-        ← Back to Projects
+         Back to Projects
       </button>
 
       {/* Project Header */}
@@ -197,7 +197,7 @@ export default function ProjectDetail() {
                 <select className="input text-sm"
                   onChange={(e) => { if (e.target.value) handleAddMember(Number(e.target.value)); e.target.value = ''; }}
                   defaultValue="">
-                  <option value="" disabled>Select user…</option>
+                  <option value="" disabled>Select user</option>
                   {nonMembers.map((u) => (
                     <option key={u.id} value={u.id}>{u.name} ({u.role})</option>
                   ))}

@@ -58,12 +58,12 @@ export default function LoginPage() {
             <div>
               <label className="label" htmlFor="login-password">Password</label>
               <input id="login-password" name="password" type="password" required
-                className="input" placeholder="••••••••"
+                className="input" placeholder=""
                 value={form.password} onChange={handleChange} />
             </div>
             <button id="login-submit" type="submit" disabled={loading}
               className="btn-primary w-full mt-2">
-              {loading ? 'Signing in…' : 'Sign In'}
+              {loading ? 'Signing in' : 'Sign In'}
             </button>
           </form>
 

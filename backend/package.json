@@ -1,7 +1,7 @@
 {
   "name": "team-task-manager-backend",
   "version": "1.0.0",
-  "description": "Team Task Manager REST API — Express + SQLite (Sequelize)",
+  "description": "Team Task Manager REST API  Express + SQLite (Sequelize)",
   "main": "server.js",
   "scripts": {
     "start": "node server.js",

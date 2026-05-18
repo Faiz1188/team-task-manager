@@ -75,7 +75,7 @@ export default function SignupPage() {
             </div>
             <button id="signup-submit" type="submit" disabled={loading}
               className="btn-primary w-full mt-2">
-              {loading ? 'Creating account…' : 'Create Account'}
+              {loading ? 'Creating account' : 'Create Account'}
             </button>
           </form>
 

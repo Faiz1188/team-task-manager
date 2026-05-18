@@ -8,7 +8,7 @@ const { Task } = require('../modules/tasks/task.model');
 const { DataTypes } = require('sequelize');
 const { sequelize } = require('./db');
 
-// ── ProjectMembers join table ─────────────────────────────────────────────────
+//  ProjectMembers join table 
 const ProjectMember = sequelize.define(
   'ProjectMember',
   {
@@ -18,20 +18,20 @@ const ProjectMember = sequelize.define(
   { tableName: 'project_members', timestamps: false }
 );
 
-// ── Associations ─────────────────────────────────────────────────────────────
-// Project ↔ Owner
+//  Associations 
+// Project  Owner
 Project.belongsTo(User,    { as: 'owner',   foreignKey: 'ownerId' });
 User.hasMany(Project,      { as: 'ownedProjects', foreignKey: 'ownerId' });
 
-// Project ↔ Members (many-to-many)
+// Project  Members (many-to-many)
 Project.belongsToMany(User,    { through: ProjectMember, as: 'members',  foreignKey: 'projectId' });
 User.belongsToMany(Project,    { through: ProjectMember, as: 'projects', foreignKey: 'userId' });
 
-// Task ↔ Project
+// Task  Project
 Task.belongsTo(Project, { as: 'project',      foreignKey: 'projectId' });
 Project.hasMany(Task,   { as: 'tasks',        foreignKey: 'projectId' });
 
-// Task ↔ AssignedUser
+// Task  AssignedUser
 Task.belongsTo(User,    { as: 'assignedUser', foreignKey: 'assignedUserId' });
 User.hasMany(Task,      { as: 'assignedTasks',foreignKey: 'assignedUserId' });
 

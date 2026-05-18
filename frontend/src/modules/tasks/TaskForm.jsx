@@ -4,10 +4,10 @@ import { updateTask } from './taskSlice';
 import api from '../../services/api';
 
 /**
- * TaskForm — reusable create/edit form.
+ * TaskForm  reusable create/edit form.
  *
- * When `task` is null → create mode (calls onSubmit(data), then onClose)
- * When `task` is set  → edit mode  (dispatches updateTask, then calls onClose)
+ * When `task` is null  create mode (calls onSubmit(data), then onClose)
+ * When `task` is set   edit mode  (dispatches updateTask, then calls onClose)
  *
  * The parent renders the modal backdrop. This component renders ONLY the form.
  *
@@ -100,7 +100,7 @@ export default function TaskForm({ task, members = [], onSubmit, onClose }) {
         <div>
           <label className="label">Description</label>
           <textarea name="description" className="input resize-none" rows={3}
-            placeholder="Optional details…"
+            placeholder="Optional details"
             value={form.description} onChange={handleChange} />
         </div>
 
@@ -133,11 +133,11 @@ export default function TaskForm({ task, members = [], onSubmit, onClose }) {
             value={form.assignedUserId} onChange={handleChange}
             disabled={loadingUsers}>
             <option value="">
-              {loadingUsers ? 'Loading users…' : 'Unassigned'}
+              {loadingUsers ? 'Loading users' : 'Unassigned'}
             </option>
             {assigneeOptions.map((u) => (
               <option key={u.id} value={u.id}>
-                {u.name} — {u.role}
+                {u.name}  {u.role}
               </option>
             ))}
           </select>
@@ -155,7 +155,7 @@ export default function TaskForm({ task, members = [], onSubmit, onClose }) {
           </button>
           <button type="submit" disabled={submitting || loadingUsers}
             className="btn-primary flex-1">
-            {submitting ? 'Saving…' : isEdit ? 'Save Changes' : 'Create Task'}
+            {submitting ? 'Saving' : isEdit ? 'Save Changes' : 'Create Task'}
           </button>
         </div>
       </form>

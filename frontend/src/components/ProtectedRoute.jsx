@@ -4,7 +4,7 @@ import { Navigate, useLocation } from 'react-router-dom';
 /**
  * Wraps routes that require authentication (and optionally a specific role).
  * Props:
- *   - allowedRoles?: string[]  — if provided, only these roles can access
+ *   - allowedRoles?: string[]   if provided, only these roles can access
  */
 export default function ProtectedRoute({ children, allowedRoles }) {
   const { user, token } = useSelector((s) => s.auth);

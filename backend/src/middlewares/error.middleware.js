@@ -4,7 +4,7 @@
  */
 // eslint-disable-next-line no-unused-vars
 const errorMiddleware = (err, req, res, next) => {
-  console.error('❌ Error:', err);
+  console.error(' Error:', err);
 
   // Sequelize validation errors
   if (err.name === 'SequelizeValidationError' || err.name === 'SequelizeUniqueConstraintError') {

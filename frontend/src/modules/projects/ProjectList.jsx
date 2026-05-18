@@ -107,7 +107,7 @@ export default function ProjectList() {
                 </div>
                 <Link to={`/projects/${project.id}`}
                   className="text-primary-500 text-sm hover:text-primary-400 font-medium transition-colors">
-                  View →
+                  View 
                 </Link>
               </div>
             </div>
@@ -128,7 +128,7 @@ export default function ProjectList() {
               </div>
               <div>
                 <label className="label">Description</label>
-                <textarea className="input resize-none" rows={3} placeholder="Optional description…"
+                <textarea className="input resize-none" rows={3} placeholder="Optional description"
                   value={form.description} onChange={(e) => setForm({ ...form, description: e.target.value })} />
               </div>
               <div className="flex gap-3 pt-2">
@@ -136,7 +136,7 @@ export default function ProjectList() {
                   Cancel
                 </button>
                 <button type="submit" disabled={submitting} className="btn-primary flex-1">
-                  {submitting ? 'Creating…' : 'Create Project'}
+                  {submitting ? 'Creating' : 'Create Project'}
                 </button>
               </div>
             </form>
