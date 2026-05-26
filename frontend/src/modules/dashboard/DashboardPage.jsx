@@ -3,14 +3,14 @@ import { useDispatch, useSelector } from 'react-redux';
 import { Link } from 'react-router-dom';
 import { fetchDashboard } from '../tasks/taskSlice';
 
-const StatCard = ({ label, value, color, icon }) => (
-  <div className="card flex items-center gap-4 hover:border-slate-700 transition-colors">
-    <div className={`w-12 h-12 rounded-xl flex items-center justify-center flex-shrink-0 ${color}`}>
+const StatCard = ({ label, value, tone, icon }) => (
+  <div className="card flex items-center gap-4 transition-all hover:-translate-y-0.5 hover:shadow-md">
+    <div className={`flex h-12 w-12 flex-shrink-0 items-center justify-center rounded-2xl ${tone}`}>
       {icon}
     </div>
     <div>
-      <p className="text-3xl font-bold text-white">{value ?? ''}</p>
-      <p className="text-sm text-slate-400 mt-0.5">{label}</p>
+      <p className="text-3xl font-bold tracking-tight text-slate-950">{value ?? ''}</p>
+      <p className="mt-1 text-sm font-medium text-slate-500">{label}</p>
     </div>
   </div>
 );
@@ -32,65 +32,72 @@ export default function DashboardPage() {
   const recentTasks  = dashboard?.tasks?.slice(0, 8) || [];
 
   return (
-    <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
-      {/* Header */}
-      <div className="mb-8">
-        <h1 className="text-3xl font-bold text-white">
-          Welcome back, <span className="text-primary-500">{user?.name?.split(' ')[0]}</span> 
-        </h1>
-        <p className="text-slate-400 mt-1">Here's what's happening with your team today.</p>
+    <div className="mx-auto max-w-7xl space-y-7">
+      <div className="flex flex-col gap-4 rounded-3xl border border-slate-200 bg-white p-6 shadow-sm sm:flex-row sm:items-center sm:justify-between">
+        <div>
+          <p className="text-sm font-semibold uppercase tracking-wide text-primary-600">Dashboard</p>
+          <h1 className="mt-2 text-3xl font-bold tracking-tight text-slate-950">
+            Welcome back, {user?.name?.split(' ')[0] || 'there'}
+          </h1>
+          <p className="mt-2 max-w-2xl text-sm leading-6 text-slate-500">Monitor workload, overdue items, and team activity from one clean workspace.</p>
+        </div>
+        <Link to="/tasks" className="btn-primary self-start sm:self-auto">View Tasks</Link>
       </div>
 
       {loading && (
-        <div className="flex items-center gap-2 text-slate-400 mb-6">
-          <div className="w-4 h-4 border-2 border-primary-500 border-t-transparent rounded-full animate-spin" />
+        <div className="flex items-center gap-3 rounded-2xl border border-primary-100 bg-primary-50 px-4 py-3 text-sm font-medium text-primary-700">
+          <div className="h-4 w-4 animate-spin rounded-full border-2 border-primary-600 border-t-transparent" />
           Loading dashboard
         </div>
       )}
 
-      {/* Stats Grid */}
-      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-4 mb-8">
+      <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 xl:grid-cols-5">
         <StatCard label="Total Tasks" value={dashboard?.total}
-          color="bg-primary-600/20"
-          icon={<svg className="w-6 h-6 text-primary-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2" /></svg>}
+          tone="bg-primary-50 text-primary-600"
+          icon={<svg className="h-6 w-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 012-2h2a2 2 0 012 2" /></svg>}
         />
         <StatCard label="To Do" value={dashboard?.todo}
-          color="bg-slate-600/30"
-          icon={<svg className="w-6 h-6 text-slate-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>}
+          tone="bg-slate-100 text-slate-600"
+          icon={<svg className="h-6 w-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>}
         />
         <StatCard label="In Progress" value={dashboard?.inProgress}
-          color="bg-amber-600/20"
-          icon={<svg className="w-6 h-6 text-amber-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 10V3L4 14h7v7l9-11h-7z" /></svg>}
+          tone="bg-amber-50 text-amber-600"
+          icon={<svg className="h-6 w-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 10V3L4 14h7v7l9-11h-7z" /></svg>}
         />
         <StatCard label="Done" value={dashboard?.done}
-          color="bg-emerald-600/20"
-          icon={<svg className="w-6 h-6 text-emerald-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>}
+          tone="bg-emerald-50 text-emerald-600"
+          icon={<svg className="h-6 w-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>}
         />
         <StatCard label="Overdue" value={dashboard?.overdue}
-          color="bg-red-600/20"
-          icon={<svg className="w-6 h-6 text-red-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" /></svg>}
+          tone="bg-red-50 text-red-600"
+          icon={<svg className="h-6 w-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 9v2m0 4h.01M4.93 19h14.14c1.54 0 2.5-1.67 1.73-3L13.73 4c-.77-1.33-2.69-1.33-3.46 0L3.2 16c-.77 1.33.19 3 1.73 3z" /></svg>}
         />
       </div>
 
-      <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
-        {/* Recent Tasks */}
-        <div className="lg:col-span-2 card">
-          <div className="flex items-center justify-between mb-4">
-            <h2 className="font-semibold text-white">Recent Tasks</h2>
-            <Link to="/tasks" className="text-primary-500 text-sm hover:text-primary-400">View all </Link>
+      <div className="grid grid-cols-1 gap-6 xl:grid-cols-3">
+        <section className="card xl:col-span-2">
+          <div className="mb-5 flex items-center justify-between gap-4">
+            <div>
+              <h2 className="text-lg font-bold text-slate-950">Recent Tasks</h2>
+              <p className="mt-1 text-sm text-slate-500">Latest work across your accessible projects.</p>
+            </div>
+            <Link to="/tasks" className="text-sm font-semibold text-primary-600 hover:text-primary-700">View all</Link>
           </div>
+
           {recentTasks.length === 0 ? (
-            <p className="text-slate-500 text-sm py-8 text-center">No tasks yet. Create one from a project!</p>
+            <div className="rounded-2xl border border-dashed border-slate-200 bg-slate-50 px-6 py-10 text-center">
+              <p className="font-semibold text-slate-700">No tasks yet</p>
+              <p className="mt-1 text-sm text-slate-500">Create tasks from a project to start tracking progress.</p>
+            </div>
           ) : (
-            <div className="space-y-3">
+            <div className="divide-y divide-slate-100">
               {recentTasks.map((task) => (
-                <div key={task.id}
-                  className="flex items-center justify-between p-3 bg-dark-700 rounded-lg border border-slate-800 hover:border-slate-700 transition-colors">
-                  <div className="min-w-0 flex-1">
-                    <p className="text-sm font-medium text-slate-200 truncate">{task.title}</p>
-                    <p className="text-xs text-slate-500 mt-0.5">{task.project?.name}</p>
+                <div key={task.id} className="flex flex-col gap-3 py-4 sm:flex-row sm:items-center sm:justify-between">
+                  <div className="min-w-0">
+                    <p className="truncate text-sm font-semibold text-slate-900">{task.title}</p>
+                    <p className="mt-1 text-xs font-medium text-slate-500">{task.project?.name || 'No project'}</p>
                   </div>
-                  <div className="flex items-center gap-2 ml-4 flex-shrink-0">
+                  <div className="flex flex-wrap items-center gap-2">
                     {task.isOverdue && <span className="badge-overdue">Overdue</span>}
                     {statusBadge(task.status)}
                   </div>
@@ -98,57 +105,54 @@ export default function DashboardPage() {
               ))}
             </div>
           )}
-        </div>
+        </section>
 
-        {/* Overdue Tasks */}
-        <div className="card">
-          <h2 className="font-semibold text-white mb-4 flex items-center gap-2">
-            <span className="w-2 h-2 bg-red-500 rounded-full animate-pulse" />
-            Overdue Tasks
-          </h2>
+        <section className="card border-red-100 bg-red-50/40">
+          <div className="mb-5 flex items-center gap-3">
+            <span className="h-3 w-3 rounded-full bg-red-500" />
+            <div>
+              <h2 className="text-lg font-bold text-slate-950">Overdue Tasks</h2>
+              <p className="mt-1 text-sm text-slate-500">Items needing quick attention.</p>
+            </div>
+          </div>
+
           {overdueTasks.length === 0 ? (
-            <p className="text-slate-500 text-sm py-8 text-center"> No overdue tasks!</p>
+            <div className="rounded-2xl border border-red-100 bg-white px-5 py-8 text-center">
+              <p className="font-semibold text-slate-700">No overdue tasks</p>
+              <p className="mt-1 text-sm text-slate-500">Your board is currently on schedule.</p>
+            </div>
           ) : (
             <div className="space-y-3">
               {overdueTasks.map((task) => (
-                <div key={task.id} className="p-3 bg-red-900/20 rounded-lg border border-red-900/40">
-                  <p className="text-sm font-medium text-slate-200">{task.title}</p>
-                  <p className="text-xs text-red-400 mt-1">Due: {new Date(task.dueDate).toLocaleDateString()}</p>
+                <div key={task.id} className="rounded-2xl border border-red-100 bg-white p-4">
+                  <p className="text-sm font-semibold text-slate-900">{task.title}</p>
+                  <p className="mt-2 text-xs font-semibold text-red-600">Due: {new Date(task.dueDate).toLocaleDateString()}</p>
                   {task.assignedUser && (
-                    <p className="text-xs text-slate-500 mt-0.5"> {task.assignedUser.name}</p>
+                    <p className="mt-1 text-xs text-slate-500">Assigned to {task.assignedUser.name}</p>
                   )}
                 </div>
               ))}
             </div>
           )}
-        </div>
+        </section>
       </div>
 
-      {/* Quick Links */}
-      <div className="mt-6 grid grid-cols-2 gap-4">
-        <Link to="/projects"
-          className="card hover:border-primary-600/50 transition-all duration-200 flex items-center gap-3 group">
-          <div className="w-10 h-10 bg-primary-600/20 rounded-lg flex items-center justify-center group-hover:bg-primary-600/40 transition-colors">
-            <svg className="w-5 h-5 text-primary-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 7v10a2 2 0 002 2h14a2 2 0 002-2V9a2 2 0 00-2-2h-6l-2-2H5a2 2 0 00-2 2z" />
-            </svg>
-          </div>
+      <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
+        <Link to="/projects" className="card group flex items-center justify-between gap-4 transition-all hover:-translate-y-0.5 hover:border-primary-200 hover:shadow-md">
           <div>
-            <p className="font-medium text-white text-sm">View Projects</p>
-            <p className="text-xs text-slate-400">Manage your team projects</p>
+            <p className="text-sm font-semibold uppercase tracking-wide text-primary-600">Projects</p>
+            <p className="mt-2 text-lg font-bold text-slate-950">Manage team projects</p>
+            <p className="mt-1 text-sm text-slate-500">Review project membership and tasks.</p>
           </div>
+          <span className="rounded-full bg-primary-50 px-3 py-2 text-primary-600 transition-colors group-hover:bg-primary-100">View</span>
         </Link>
-        <Link to="/tasks"
-          className="card hover:border-primary-600/50 transition-all duration-200 flex items-center gap-3 group">
-          <div className="w-10 h-10 bg-emerald-600/20 rounded-lg flex items-center justify-center group-hover:bg-emerald-600/40 transition-colors">
-            <svg className="w-5 h-5 text-emerald-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M15 11l-3 3-1.5-1.5" />
-            </svg>
-          </div>
+        <Link to="/tasks" className="card group flex items-center justify-between gap-4 transition-all hover:-translate-y-0.5 hover:border-primary-200 hover:shadow-md">
           <div>
-            <p className="font-medium text-white text-sm">View All Tasks</p>
-            <p className="text-xs text-slate-400">Filter and track task progress</p>
+            <p className="text-sm font-semibold uppercase tracking-wide text-emerald-600">Tasks</p>
+            <p className="mt-2 text-lg font-bold text-slate-950">Open task queue</p>
+            <p className="mt-1 text-sm text-slate-500">Filter work by project and status.</p>
           </div>
+          <span className="rounded-full bg-emerald-50 px-3 py-2 text-emerald-600 transition-colors group-hover:bg-emerald-100">View</span>
         </Link>
       </div>
     </div>

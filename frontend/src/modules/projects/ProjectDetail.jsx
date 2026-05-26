@@ -26,14 +26,10 @@ export default function ProjectDetail() {
     dispatch(fetchProject(id));
     dispatch(fetchTasks({ projectId: id }));
     if (isAdmin) {
-      api.get('/users').then(({ data }) => setAllUsers(data.data)).catch(() => {});
+      api.get('/users').then(({ data }) => setAllUsers(data.data || [])).catch(() => {});
     }
     return () => dispatch(clearCurrentProject());
   }, [id, dispatch, isAdmin]);
-
-  useEffect(() => {
-    if (current) setProjectForm({ name: current.name, description: current.description || '' });
-  }, [current]);
 
   const projectTasks = tasks.filter((t) => String(t.projectId) === String(id));
   const memberIds    = (current?.members || []).map((m) => m.id);
@@ -51,19 +47,18 @@ export default function ProjectDetail() {
 
   const handleCreateTask = async (data) => {
     await dispatch(createTask({ ...data, projectId: Number(id) }));
-    // TaskForm calls onClose() itself after this resolves
   };
 
   if (loading && !current) {
     return (
-      <div className="max-w-7xl mx-auto px-4 py-8">
-        <div className="card animate-pulse h-40" />
+      <div className="mx-auto max-w-7xl">
+        <div className="h-48 animate-pulse rounded-3xl border border-slate-200 bg-white shadow-sm" />
       </div>
     );
   }
 
   if (!current) return (
-    <div className="max-w-7xl mx-auto px-4 py-8 text-slate-400">Project not found.</div>
+    <div className="mx-auto max-w-7xl rounded-2xl border border-slate-200 bg-white p-8 text-center text-slate-500 shadow-sm">Project not found.</div>
   );
 
   const tasksByStatus = {
@@ -73,61 +68,76 @@ export default function ProjectDetail() {
   };
 
   const columnConfig = [
-    { key: 'todo',        label: 'To Do',       dot: 'bg-slate-400' },
-    { key: 'in-progress', label: 'In Progress',  dot: 'bg-amber-400' },
-    { key: 'done',        label: 'Done',         dot: 'bg-emerald-400' },
+    { key: 'todo',        label: 'To Do',        tone: 'bg-slate-100 text-slate-600', dot: 'bg-slate-400' },
+    { key: 'in-progress', label: 'In Progress',  tone: 'bg-amber-100 text-amber-700', dot: 'bg-amber-400' },
+    { key: 'done',        label: 'Done',         tone: 'bg-emerald-100 text-emerald-700', dot: 'bg-emerald-400' },
   ];
 
   return (
-    <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
-      {/* Back */}
+    <div className="mx-auto max-w-7xl space-y-7">
       <button onClick={() => navigate('/projects')}
-        className="flex items-center gap-1 text-slate-400 hover:text-white text-sm mb-6 transition-colors">
-         Back to Projects
+        className="inline-flex items-center gap-2 text-sm font-semibold text-slate-500 transition-colors hover:text-primary-700">
+        <svg className="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" />
+        </svg>
+        Back to Projects
       </button>
 
-      {/* Project Header */}
-      <div className="card mb-6">
+      <section className="rounded-3xl border border-slate-200 bg-white p-6 shadow-sm">
         {editingProject ? (
-          <form onSubmit={handleSaveProject} className="space-y-3">
-            <input className="input text-xl font-bold" value={projectForm.name}
-              onChange={(e) => setProjectForm({ ...projectForm, name: e.target.value })} required />
-            <textarea className="input resize-none" rows={2} value={projectForm.description}
-              onChange={(e) => setProjectForm({ ...projectForm, description: e.target.value })} />
-            <div className="flex gap-3">
+          <form onSubmit={handleSaveProject} className="space-y-4">
+            <div>
+              <label className="label">Project Name</label>
+              <input className="input text-lg font-semibold" value={projectForm.name}
+                onChange={(e) => setProjectForm({ ...projectForm, name: e.target.value })} required />
+            </div>
+            <div>
+              <label className="label">Description</label>
+              <textarea className="input resize-none" rows={3} value={projectForm.description}
+                onChange={(e) => setProjectForm({ ...projectForm, description: e.target.value })} />
+            </div>
+            <div className="flex flex-wrap gap-3">
               <button type="button" onClick={() => setEditingProject(false)} className="btn-secondary">Cancel</button>
-              <button type="submit" className="btn-primary">Save</button>
+              <button type="submit" className="btn-primary">Save Project</button>
             </div>
           </form>
         ) : (
-          <div className="flex items-start justify-between">
+          <div className="flex flex-col gap-5 lg:flex-row lg:items-start lg:justify-between">
             <div>
-              <h1 className="text-2xl font-bold text-white">{current.name}</h1>
-              <p className="text-slate-400 mt-1">{current.description || 'No description.'}</p>
-              <p className="text-xs text-slate-500 mt-2">Owner: {current.owner?.name}</p>
+              <p className="text-sm font-semibold uppercase tracking-wide text-primary-600">Project Workspace</p>
+              <h1 className="mt-2 text-3xl font-bold tracking-tight text-slate-950">{current.name}</h1>
+              <p className="mt-3 max-w-3xl text-sm leading-6 text-slate-500">{current.description || 'No description provided.'}</p>
+              <div className="mt-4 flex flex-wrap items-center gap-3 text-sm text-slate-500">
+                <span className="rounded-full bg-slate-100 px-3 py-1 font-medium">Owner: {current.owner?.name || 'Unknown'}</span>
+                <span className="rounded-full bg-slate-100 px-3 py-1 font-medium">{current.members?.length || 0} member{(current.members?.length || 0) !== 1 ? 's' : ''}</span>
+                <span className="rounded-full bg-slate-100 px-3 py-1 font-medium">{projectTasks.length} task{projectTasks.length !== 1 ? 's' : ''}</span>
+              </div>
             </div>
             {isAdmin && (
-              <button onClick={() => setEditingProject(true)}
-                className="btn-secondary text-sm flex items-center gap-1.5">
-                <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <button onClick={() => {
+                setProjectForm({ name: current.name, description: current.description || '' });
+                setEditingProject(true);
+              }} className="btn-secondary self-start">
+                <svg className="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z" />
                 </svg>
-                Edit
+                Edit Project
               </button>
             )}
           </div>
         )}
-      </div>
+      </section>
 
-      <div className="grid grid-cols-1 lg:grid-cols-4 gap-6">
-        {/* Task Board */}
-        <div className="lg:col-span-3">
-          <div className="flex items-center justify-between mb-4">
-            <h2 className="font-semibold text-white">Task Board</h2>
+      <div className="grid grid-cols-1 gap-6 xl:grid-cols-4">
+        <section className="xl:col-span-3">
+          <div className="mb-4 flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
+            <div>
+              <h2 className="text-xl font-bold text-slate-950">Task Board</h2>
+              <p className="mt-1 text-sm text-slate-500">Move work through the project lifecycle.</p>
+            </div>
             {isAdmin && (
-              <button id="add-task-btn" onClick={() => { setEditTask(null); setShowTaskForm(true); }}
-                className="btn-primary text-sm flex items-center gap-1.5">
-                <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <button id="add-task-btn" onClick={() => { setEditTask(null); setShowTaskForm(true); }} className="btn-primary self-start sm:self-auto">
+                <svg className="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 4v16m8-8H4" />
                 </svg>
                 Add Task
@@ -135,84 +145,84 @@ export default function ProjectDetail() {
             )}
           </div>
 
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-            {columnConfig.map(({ key, label, dot }) => (
-              <div key={key} className="bg-dark-800/50 rounded-xl border border-slate-800 p-4">
-                <div className="flex items-center gap-2 mb-3">
-                  <div className={`w-2 h-2 rounded-full ${dot}`} />
-                  <span className="text-sm font-medium text-slate-300">{label}</span>
-                  <span className="ml-auto text-xs text-slate-500 bg-dark-700 px-2 py-0.5 rounded-full">
+          <div className="grid grid-cols-1 gap-4 lg:grid-cols-3">
+            {columnConfig.map(({ key, label, tone, dot }) => (
+              <div key={key} className="rounded-3xl border border-slate-200 bg-white p-4 shadow-sm">
+                <div className="mb-4 flex items-center gap-2">
+                  <span className={`h-2.5 w-2.5 rounded-full ${dot}`} />
+                  <span className={`rounded-full px-3 py-1 text-xs font-bold ${tone}`}>{label}</span>
+                  <span className="ml-auto rounded-full bg-slate-100 px-2.5 py-1 text-xs font-semibold text-slate-600">
                     {tasksByStatus[key].length}
                   </span>
                 </div>
-                <div className="space-y-3 min-h-[120px]">
+                <div className="space-y-3 min-h-40">
                   {tasksByStatus[key].map((task) => (
                     <TaskCard key={task.id} task={task}
                       onEdit={isAdmin ? (t) => { setEditTask(t); setShowTaskForm(true); } : null} />
                   ))}
                   {tasksByStatus[key].length === 0 && (
-                    <p className="text-slate-600 text-xs text-center py-6">No tasks</p>
+                    <div className="rounded-2xl border border-dashed border-slate-200 bg-slate-50 px-4 py-8 text-center text-sm font-medium text-slate-400">
+                      No tasks
+                    </div>
                   )}
                 </div>
               </div>
             ))}
           </div>
-        </div>
+        </section>
 
-        {/* Members Panel */}
-        <div>
-          <div className="card">
-            <h2 className="font-semibold text-white mb-4">Members ({current.members?.length || 0})</h2>
-            <div className="space-y-2.5">
-              {(current.members || []).map((member) => (
-                <div key={member.id}
-                  className="flex items-center justify-between group">
-                  <div className="flex items-center gap-2.5 min-w-0">
-                    <div className="w-8 h-8 bg-primary-600 rounded-full flex items-center justify-center text-sm font-bold flex-shrink-0">
-                      {member.name?.charAt(0).toUpperCase()}
-                    </div>
-                    <div className="min-w-0">
-                      <p className="text-sm font-medium text-slate-200 truncate">{member.name}</p>
-                      <span className={member.role === 'admin' ? 'badge-admin' : 'badge-member'} style={{ fontSize: '10px' }}>
-                        {member.role}
-                      </span>
-                    </div>
-                  </div>
-                  {isAdmin && member.id !== current.ownerId && (
-                    <button onClick={() => handleRemoveMember(member.id)}
-                      className="opacity-0 group-hover:opacity-100 text-slate-500 hover:text-red-400 transition-all p-1 flex-shrink-0">
-                      <svg className="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
-                      </svg>
-                    </button>
-                  )}
-                </div>
-              ))}
-            </div>
-
-            {/* Add Member */}
-            {isAdmin && nonMembers.length > 0 && (
-              <div className="mt-4 pt-4 border-t border-slate-800">
-                <p className="text-xs text-slate-500 mb-2 font-medium uppercase tracking-wide">Add Member</p>
-                <select className="input text-sm"
-                  onChange={(e) => { if (e.target.value) handleAddMember(Number(e.target.value)); e.target.value = ''; }}
-                  defaultValue="">
-                  <option value="" disabled>Select user</option>
-                  {nonMembers.map((u) => (
-                    <option key={u.id} value={u.id}>{u.name} ({u.role})</option>
-                  ))}
-                </select>
-              </div>
-            )}
+        <aside className="card h-fit">
+          <div className="mb-5">
+            <h2 className="text-lg font-bold text-slate-950">Members</h2>
+            <p className="mt-1 text-sm text-slate-500">{current.members?.length || 0} people assigned.</p>
           </div>
-        </div>
+
+          <div className="space-y-3">
+            {(current.members || []).map((member) => (
+              <div key={member.id} className="flex items-center justify-between gap-3 rounded-2xl border border-slate-100 bg-slate-50 px-3 py-3">
+                <div className="flex min-w-0 items-center gap-3">
+                  <div className="flex h-9 w-9 flex-shrink-0 items-center justify-center rounded-full bg-primary-100 text-sm font-bold text-primary-700">
+                    {member.name?.charAt(0).toUpperCase()}
+                  </div>
+                  <div className="min-w-0">
+                    <p className="truncate text-sm font-semibold text-slate-900">{member.name}</p>
+                    <span className={member.role === 'admin' ? 'badge-admin mt-1' : 'badge-member mt-1'}>{member.role}</span>
+                  </div>
+                </div>
+                {isAdmin && member.id !== current.ownerId && (
+                  <button onClick={() => handleRemoveMember(member.id)}
+                    className="rounded-lg p-1.5 text-slate-400 transition-colors hover:bg-red-50 hover:text-red-600"
+                    aria-label="Remove member">
+                    <svg className="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+                    </svg>
+                  </button>
+                )}
+              </div>
+            ))}
+          </div>
+
+          {isAdmin && nonMembers.length > 0 && (
+            <div className="mt-5 border-t border-slate-100 pt-5">
+              <label className="label">Add Member</label>
+              <select className="input"
+                onChange={(e) => { if (e.target.value) handleAddMember(Number(e.target.value)); e.target.value = ''; }}
+                defaultValue="">
+                <option value="" disabled>Select user</option>
+                {nonMembers.map((u) => (
+                  <option key={u.id} value={u.id}>{u.name} ({u.role})</option>
+                ))}
+              </select>
+            </div>
+          )}
+        </aside>
       </div>
 
-      {/* Task Form Modal */}
       {showTaskForm && (
-        <div className="fixed inset-0 bg-black/60 backdrop-blur-sm flex items-center justify-center z-50 p-4">
-          <div className="bg-dark-800 rounded-2xl border border-slate-700 p-6 w-full max-w-md shadow-2xl">
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-slate-900/40 p-4 backdrop-blur-sm">
+          <div className="w-full max-w-lg rounded-3xl border border-slate-200 bg-white p-6 shadow-2xl">
             <TaskForm
+              key={editTask?.id ?? 'new'}
               task={editTask}
               members={current.members || []}
               onSubmit={handleCreateTask}

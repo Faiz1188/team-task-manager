@@ -11,9 +11,11 @@ import TasksPage     from './modules/tasks/TasksPage';
 
 function Layout({ children }) {
   return (
-    <div className="min-h-screen bg-dark-900">
+    <div className="min-h-screen bg-slate-50 text-slate-900">
       <Navbar />
-      <main>{children}</main>
+      <main className="min-h-screen px-4 py-6 sm:px-6 lg:ml-72 lg:px-8 lg:py-8">
+        {children}
+      </main>
     </div>
   );
 }

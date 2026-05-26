@@ -31,15 +31,16 @@ export default function ProjectList() {
   };
 
   return (
-    <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
-      <div className="flex items-center justify-between mb-8">
+    <div className="mx-auto max-w-7xl space-y-7">
+      <div className="flex flex-col gap-4 rounded-3xl border border-slate-200 bg-white p-6 shadow-sm sm:flex-row sm:items-center sm:justify-between">
         <div>
-          <h1 className="text-3xl font-bold text-white">Projects</h1>
-          <p className="text-slate-400 mt-1">{list.length} project{list.length !== 1 ? 's' : ''}</p>
+          <p className="text-sm font-semibold uppercase tracking-wide text-primary-600">Projects</p>
+          <h1 className="mt-2 text-3xl font-bold tracking-tight text-slate-950">Team Projects</h1>
+          <p className="mt-2 text-sm text-slate-500">{list.length} project{list.length !== 1 ? 's' : ''} available in your workspace.</p>
         </div>
         {isAdmin && (
-          <button id="create-project-btn" onClick={() => setShowModal(true)} className="btn-primary flex items-center gap-2">
-            <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <button id="create-project-btn" onClick={() => setShowModal(true)} className="btn-primary self-start sm:self-auto">
+            <svg className="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 4v16m8-8H4" />
             </svg>
             New Project
@@ -47,79 +48,85 @@ export default function ProjectList() {
         )}
       </div>
 
-      {error && <div className="mb-4 text-red-400 text-sm">{error}</div>}
+      {error && <div className="rounded-2xl border border-red-200 bg-red-50 px-4 py-3 text-sm font-medium text-red-700">{error}</div>}
 
       {loading ? (
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+        <div className="grid grid-cols-1 gap-4 md:grid-cols-2 xl:grid-cols-3">
           {[...Array(3)].map((_, i) => (
-            <div key={i} className="card animate-pulse h-40 bg-dark-700" />
+            <div key={i} className="h-52 animate-pulse rounded-2xl border border-slate-200 bg-white p-6 shadow-sm">
+              <div className="h-10 w-10 rounded-xl bg-slate-100" />
+              <div className="mt-6 h-4 w-2/3 rounded bg-slate-100" />
+              <div className="mt-3 h-3 w-full rounded bg-slate-100" />
+            </div>
           ))}
         </div>
       ) : list.length === 0 ? (
-        <div className="card text-center py-16">
-          <div className="w-16 h-16 bg-dark-700 rounded-2xl flex items-center justify-center mx-auto mb-4">
-            <svg className="w-8 h-8 text-slate-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+        <div className="card flex flex-col items-center py-16 text-center">
+          <div className="flex h-16 w-16 items-center justify-center rounded-2xl bg-primary-50 text-primary-600">
+            <svg className="h-8 w-8" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 7v10a2 2 0 002 2h14a2 2 0 002-2V9a2 2 0 00-2-2h-6l-2-2H5a2 2 0 00-2 2z" />
             </svg>
           </div>
-          <p className="text-slate-400 font-medium">No projects yet</p>
-          {isAdmin && <p className="text-slate-500 text-sm mt-1">Create your first project to get started.</p>}
+          <p className="mt-5 text-lg font-bold text-slate-950">No projects yet</p>
+          <p className="mt-2 max-w-md text-sm text-slate-500">Create a project to organize members, assign tasks, and track progress.</p>
         </div>
       ) : (
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+        <div className="grid grid-cols-1 gap-4 md:grid-cols-2 xl:grid-cols-3">
           {list.map((project) => (
-            <div key={project.id}
-              className="card hover:border-slate-700 transition-all duration-200 group flex flex-col">
-              <div className="flex items-start justify-between mb-3">
-                <div className="w-10 h-10 bg-primary-600/20 rounded-lg flex items-center justify-center flex-shrink-0">
-                  <svg className="w-5 h-5 text-primary-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <article key={project.id} className="card group flex min-h-56 flex-col transition-all hover:-translate-y-0.5 hover:border-primary-200 hover:shadow-md">
+              <div className="mb-4 flex items-start justify-between gap-4">
+                <div className="flex h-11 w-11 flex-shrink-0 items-center justify-center rounded-2xl bg-primary-50 text-primary-600">
+                  <svg className="h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 7v10a2 2 0 002 2h14a2 2 0 002-2V9a2 2 0 00-2-2h-6l-2-2H5a2 2 0 00-2 2z" />
                   </svg>
                 </div>
                 {isAdmin && (
                   <button onClick={() => handleDelete(project.id)}
-                    className="opacity-0 group-hover:opacity-100 text-slate-500 hover:text-red-400 transition-all p-1">
-                    <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    className="rounded-lg p-2 text-slate-400 opacity-100 transition-colors hover:bg-red-50 hover:text-red-600 sm:opacity-0 sm:group-hover:opacity-100"
+                    aria-label="Delete project">
+                    <svg className="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                       <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
                     </svg>
                   </button>
                 )}
               </div>
 
-              <h3 className="font-semibold text-white text-lg">{project.name}</h3>
-              <p className="text-slate-400 text-sm mt-1 flex-1 line-clamp-2">
+              <h3 className="text-lg font-bold text-slate-950">{project.name}</h3>
+              <p className="mt-2 flex-1 text-sm leading-6 text-slate-500 line-clamp-3">
                 {project.description || 'No description provided.'}
               </p>
 
-              <div className="mt-4 pt-4 border-t border-slate-800 flex items-center justify-between">
+              <div className="mt-5 flex items-center justify-between border-t border-slate-100 pt-4">
                 <div className="flex -space-x-2">
                   {(project.members || []).slice(0, 4).map((m) => (
                     <div key={m.id} title={m.name}
-                      className="w-7 h-7 bg-primary-600 rounded-full border-2 border-dark-800 flex items-center justify-center text-xs font-bold text-white">
+                      className="flex h-8 w-8 items-center justify-center rounded-full border-2 border-white bg-primary-100 text-xs font-bold text-primary-700">
                       {m.name?.charAt(0).toUpperCase()}
                     </div>
                   ))}
                   {(project.members?.length || 0) > 4 && (
-                    <div className="w-7 h-7 bg-slate-700 rounded-full border-2 border-dark-800 flex items-center justify-center text-xs text-slate-300">
+                    <div className="flex h-8 w-8 items-center justify-center rounded-full border-2 border-white bg-slate-100 text-xs font-semibold text-slate-600">
                       +{project.members.length - 4}
                     </div>
                   )}
                 </div>
-                <Link to={`/projects/${project.id}`}
-                  className="text-primary-500 text-sm hover:text-primary-400 font-medium transition-colors">
-                  View 
+                <Link to={`/projects/${project.id}`} className="text-sm font-semibold text-primary-600 hover:text-primary-700">
+                  View
                 </Link>
               </div>
-            </div>
+            </article>
           ))}
         </div>
       )}
 
-      {/* Create Modal */}
       {showModal && (
-        <div className="fixed inset-0 bg-black/60 backdrop-blur-sm flex items-center justify-center z-50 p-4">
-          <div className="bg-dark-800 rounded-2xl border border-slate-700 p-6 w-full max-w-md shadow-2xl">
-            <h2 className="text-xl font-bold text-white mb-5">New Project</h2>
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-slate-900/40 p-4 backdrop-blur-sm">
+          <div className="w-full max-w-md rounded-3xl border border-slate-200 bg-white p-6 shadow-2xl">
+            <div className="mb-5">
+              <p className="text-sm font-semibold uppercase tracking-wide text-primary-600">New Project</p>
+              <h2 className="mt-2 text-2xl font-bold text-slate-950">Create project</h2>
+              <p className="mt-1 text-sm text-slate-500">Add a workspace for tasks and team members.</p>
+            </div>
             <form onSubmit={handleCreate} className="space-y-4">
               <div>
                 <label className="label">Project Name</label>
