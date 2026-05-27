@@ -1,4 +1,5 @@
 const express = require('express');
+const path = require('path');
 const cors = require('cors');
 const morgan = require('morgan');
 
@@ -31,5 +32,12 @@ app.get('/api/health', (_req, res) => {
 
 //  Global Error Handler 
 app.use(errorMiddleware);
+
+//  Serve frontend in production 
+const frontendDist = path.join(__dirname, '../../frontend/dist');
+app.use(express.static(frontendDist));
+app.get('*', (_req, res) => {
+  res.sendFile(path.join(frontendDist, 'index.html'));
+});
 
 module.exports = app;
